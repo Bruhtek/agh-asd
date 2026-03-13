@@ -1,0 +1,1 @@
+# Given an int array of length n, find and return (if exists) a number that exists more than n/2 times
