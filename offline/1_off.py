@@ -4,23 +4,23 @@ from random import randint, seed
 OIOIOI = True
 
 
-def gt(a: str, b: str)->bool:
-    if a == b: return False
-
-    n = len(a)
-    m = len(b)
-
-    i, j = 0, 0
-    while i < n and j < m and a[i] == b[j]:
-        i += 1
-        j += 1
-
-    if i == n:
-        return False
-    elif j == m:
-        return True
-
-    return ord(a[i]) > ord(b[i])
+# def gt(a: str, b: str)->bool:
+#     if a == b: return False
+#
+#     n = len(a)
+#     m = len(b)
+#
+#     i, j = 0, 0
+#     while i < n and j < m and a[i] == b[j]:
+#         i += 1
+#         j += 1
+#
+#     if i == n:
+#         return False
+#     elif j == m:
+#         return True
+#
+#     return ord(a[i]) > ord(b[i])
 
 def merge(a: list[tuple[str,int]], b: list[tuple[str,int]], startA: int, startB: int, end: int):
     i = startA
@@ -28,7 +28,7 @@ def merge(a: list[tuple[str,int]], b: list[tuple[str,int]], startA: int, startB:
     j = startB
 
     while i < startB and j < end:
-        if gt(a[i][0], a[j][0]):
+        if a[i][0] > a[j][0]:
             b[k] = a[i]
             i += 1
         else:
