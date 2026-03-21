@@ -22,53 +22,52 @@ OIOIOI = True
 #
 #     return ord(a[i]) > ord(b[i])
 
-def merge(a: list[tuple[str,int]], b: list[tuple[str,int]], startA: int, startB: int, end: int):
-    i = startA
-    k = startA
-    j = startB
+def merge(a: list[tuple[str,int]], b: list[tuple[str,int]], p: int, q: int, r: int):
+    i = p
+    k = p
+    j = q
 
-    while i < startB and j < end:
-        if a[i][0] > a[j][0]:
+    while i < q and j < r:
+        if a[i][0] >= a[j][0]:
             b[k] = a[i]
             i += 1
         else:
-            new_j = (a[j][0], a[j][1] + (startB - i))
-            b[k] = new_j
+            a[j][1] += (q - i)
+            b[k] = a[j]
             j += 1
         k += 1
 
-    while i < startB:
+    while i < q:
         b[k] = a[i]
         k += 1
         i += 1
 
-    while j < end:
+    while j < r:
         b[k] = a[j]
         k += 1
         j += 1
 
-    for t in range(startA, end):
-        a[t] = b[t]
+    a[p:r] = b[p:r]
 
-def merge_sort(T: list[tuple[str,int]], b: list[tuple[str,int]], start: int, end: int):
-    if end - start <= 1:
+def merge_sort(T: list[tuple[str,int]], b: list[tuple[str,int]], p: int, r: int):
+    if r - p <= 1:
         return
 
-    mid = (end + start) // 2
-    merge_sort(T, b, start, mid)
-    merge_sort(T, b, mid, end)
+    q = (r + p) // 2
+    merge_sort(T, b, p, q)
+    merge_sort(T, b, q, r)
 
-    merge(T, b, start, mid, end)
+    merge(T, b, p, q, r)
 
 
 def solution(T: list[str]):
     n = len(T)
-    tab = [(T[i], 0) for i in range(n)]
-    helper = [("", 0) for i in range(n)]
-    merge_sort(tab, helper, 0, n)
+    t = [[T[i], 0] for i in range(n)]
+    h = [["", 0] for i in range(n)]
+    merge_sort(t, h, 0, n)
 
     top = -1
-    for item in tab:
+    for item in t:
         top = max(top, item[1])
     return top
 
