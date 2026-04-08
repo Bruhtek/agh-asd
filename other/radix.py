@@ -16,8 +16,8 @@ def radix_sort(T: list[int]):
         for i in range(n-1,-1,-1):
             counts[(T[i]//exp) % 10] -= 1
             helper[counts[(T[i]//exp) % 10]] = T[i]
-        for i in range(n):
-            T[i] = helper[i]
+
+        T[:] = helper[:]
         exp *= 10
 
 nums = [67428094367,43216785094321,45321687954321,53421768954321,4321678954321,432187954312,43216753421,5234168754]

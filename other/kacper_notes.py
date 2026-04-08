@@ -150,7 +150,7 @@ def countingsort(A):
 # Stable: Yes
 # In-place: No
 
-
+# FOR SORTING VALUES [0, 1) ONLY
 def bucketsort(A):
     n = len(A)
     buckets = [[] for _ in range(n)]
