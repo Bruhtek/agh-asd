@@ -4,28 +4,30 @@ import queue
 Path = tuple[int,int] # to, cost
 
 
-def djikstra(start: int, end: int, G: list[list[Path]])->tuple[list[int], int]: # Visited nodes, then total cost
+def calc_routes(start: int, G: list[list[Path]])->list[tuple[list[int], int]]: # Visited nodes, then total cost
     n = len(G)
-    if start == end:
-        return [], 0
 
     visited = [False] * n
+    visits = [([], 0) for _ in range(n)] # visited, cost
     q = queue.PriorityQueue()
-    q.put((1,start)) # curr_cost, curr
-    while q.not_empty:
-        cost,v = q.get()
+    q.put((1,start,[])) # curr_cost, curr, list of visited
+
+    while not q.empty():
+        cost,v,nodes = q.get()
         if visited[v]:
             continue
-        if v == end:
-            return [], cost
 
+        new_nodes = [*nodes, v]
         visited[v] = True
-        for u,path_cost in G[v]:
-            if not visited[u]:
-                new_cost = cost * path_cost
-                q.put((new_cost, u))
+        visits[v] = (new_nodes, cost)
 
-    return [], 1e12
+        for u,path_cost in G[v]:
+            new_cost = cost * path_cost
+            if not visited[u] or len(visits[u][0]) > len(new_nodes) + 1:
+                q.put((new_cost, u, new_nodes))
+
+
+    return visits
 
 
 def main():
@@ -37,13 +39,21 @@ def main():
         G[a].append((b,c))
         G[b].append((a,c))
 
-    goals: list[int] = []
-    for _ in range(k):
-        goals.append(int(sys.stdin.readline()))
+    visits = calc_routes(1, G)
 
-    for g in goals:
-        visited,cost = djikstra(1, g, G)
-        print(visited, cost)
+    for _ in range(k):
+        goal = int(sys.stdin.readline())
+
+        route,cost = visits[goal]
+        if len(route) == 1:
+            print(0, goal, 0)
+
+        print(len(route), end=" ")
+        for v in route:
+            print(v, end=" ")
+        print(cost)
+
+
 
 if __name__ == "__main__":
     main()
