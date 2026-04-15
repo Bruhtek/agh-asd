@@ -10,10 +10,10 @@ def calc_routes(start: int, G: list[list[Path]])->list[tuple[list[int], int]]: #
     visited = [False] * n
     visits = [([], 0) for _ in range(n)] # visited, cost
     q = queue.PriorityQueue()
-    q.put((1,start,[])) # curr_cost, curr, list of visited
+    q.put((1,0,start,[])) # curr_cost, curr, list of visited
 
     while not q.empty():
-        cost,v,nodes = q.get()
+        cost,path_len,v,nodes = q.get()
         if visited[v]:
             continue
 
@@ -23,8 +23,8 @@ def calc_routes(start: int, G: list[list[Path]])->list[tuple[list[int], int]]: #
 
         for u,path_cost in G[v]:
             new_cost = cost * path_cost
-            if not visited[u] or len(visits[u][0]) > len(new_nodes) + 1:
-                q.put((new_cost, u, new_nodes))
+            if not visited[u]:
+                q.put((new_cost, path_len + 1, u, new_nodes))
 
 
     return visits
