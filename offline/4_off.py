@@ -4,26 +4,27 @@ import queue
 Path = tuple[int,int] # to, cost
 
 
-def calc_routes(start: int, G: list[list[Path]])->list[tuple[int|None, int, int]]: # Visited nodes, then total cost
+def calc_routes(start: int, G: list[list[Path]])->list[tuple[list[int], int]]: # Visited nodes, then total cost
     n = len(G)
 
     visited = [False] * n
-    visits = [(None, 0, 0) for _ in range(n)] # parent, len, cost
+    visits = [([], 0) for _ in range(n)] # visited, cost
     q = queue.PriorityQueue()
-    q.put((1,0,start,None)) # curr_cost, curr_len, curr, parent
+    q.put((1,start,[])) # curr_cost, curr, list of visited
 
     while not q.empty():
-        cost,path_len,v,parent = q.get()
+        cost,v,nodes = q.get()
         if visited[v]:
             continue
 
+        new_nodes = [*nodes, v]
         visited[v] = True
-        visits[v] = (parent, path_len+1, cost)
+        visits[v] = (new_nodes, cost)
 
         for u,path_cost in G[v]:
             new_cost = cost * path_cost
-            if not visited[u]:
-                q.put((new_cost, path_len + 1, u, v))
+            if not visited[u] or (visits[u][1] == new_cost and len(visits[u][0]) > len(new_nodes) + 1):
+                q.put((new_cost, u, new_nodes))
 
 
     return visits
@@ -43,15 +44,11 @@ def main():
     for _ in range(k):
         goal = int(sys.stdin.readline())
 
-        parent,route_len,cost = visits[goal]
-        route = [0 for _ in range(route_len)]
-        route[route_len-1] = goal
-        for i in range(route_len-2, -1, -1):
-            route[i] = parent
-            parent,_,__ = visits[parent]
+        route,cost = visits[goal]
+        if len(route) == 1:
+            print(0, goal, 0)
 
-
-        print(route_len, end=" ")
+        print(len(route), end=" ")
         for v in route:
             print(v, end=" ")
         print(cost)
