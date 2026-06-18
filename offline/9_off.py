@@ -16,6 +16,7 @@ def solve(n: int, K: int)->int:
     B = n + K
     total = xor_prefix(B) ^ xor_prefix(A - 1)
 
+
     return total - K
 
 
