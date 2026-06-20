@@ -1,3 +1,5 @@
+from egz2Atesty import runtests
+
 def kingnqueen( V,E,D,K,Q,B ):
     return -1            
     
